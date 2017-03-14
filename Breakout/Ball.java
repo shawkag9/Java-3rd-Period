@@ -8,7 +8,7 @@ import greenfoot.*;
  */
 public class Ball extends Actor
 {
-    int dx = 3;
+    int dx = 0;
     int dy = 3;
     
     /**
@@ -17,8 +17,13 @@ public class Ball extends Actor
      */
     public void act() 
     {
-        if ((getX() > getWorld().getWidth() - getImage().getWidth()/2) || (getX() < getImage().getWidth()/2)) {
+        if ((getX() > getWorld().getWidth() - getImage().getWidth()/2)) {
             dx = -dx;
+            setLocation(getWorld().getWidth() - getImage().getWidth()/2, getY());
+        }
+        if (getX() < getImage().getWidth()/2) {
+            dx = -dx;
+            setLocation(getImage().getWidth()/2, getY());
         }
         
         if (getY() < getImage().getHeight()/2) {
@@ -30,8 +35,10 @@ public class Ball extends Actor
         }
         
         if (isTouching(Brick.class)) {
-            dx = (int) (3 * Math.cos(Math.atan2(getY() - getOneIntersectingObject(Brick.class).getY(), getX() - getOneIntersectingObject(Brick.class).getX())));
-            dy = (int) (3 * Math.sin(Math.atan2(getY() - getOneIntersectingObject(Brick.class).getY(), getX() - getOneIntersectingObject(Brick.class).getX())));
+            double theta = Math.atan2(getY() - getOneIntersectingObject(Brick.class).getY(), getX() - getOneIntersectingObject(Brick.class).getX());
+            int r = 3;
+            dx = (int) (r * Math.cos(theta));
+            dy = (int) (r * Math.sin(theta));
             if (Math.abs(dx) < 1) {
                 if (dx < 0) {
                     dx = -1;
@@ -51,8 +58,10 @@ public class Ball extends Actor
         }
         
         if (isTouching(Paddle.class)) {
-            dx = (int) (3 * Math.cos(Math.atan2(getY() - getOneIntersectingObject(Paddle.class).getY(), getX() - getOneIntersectingObject(Paddle.class).getX())));
-            dy = (int) (3 * Math.sin(Math.atan2(getY() - getOneIntersectingObject(Paddle.class).getY(), getX() - getOneIntersectingObject(Paddle.class).getX())));
+            double theta = Math.atan2(getY() - getOneIntersectingObject(Paddle.class).getY(), getX() - getOneIntersectingObject(Paddle.class).getX());
+            int r = 3;
+            dx = (int) (r * Math.cos(theta));
+            dy = (int) (r * Math.sin(theta));
             if (Math.abs(dx) < 1) {
                 if (dx < 0) {
                     dx = -1;
@@ -68,7 +77,7 @@ public class Ball extends Actor
                 }
             }
         }
-        
+       
         setLocation(getX() + dx, getY() + dy);
     }
 }
