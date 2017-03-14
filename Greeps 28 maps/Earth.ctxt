@@ -1,0 +1,27 @@
+#BlueJ class context
+comment0.target=Earth
+comment0.text=\r\n\ This\ is\ Earth.\ Or\ at\ least\ some\ remote,\ uninhabited\ part\ of\ Earth.\ Here,\ Greeps\ can\r\n\ land\ and\ look\ for\ piles\ of\ tomatoes...\r\n\ \r\n\ @author\ Michael\ Kolling\r\n\ @version\ 1.0\r\n
+comment1.params=
+comment1.target=Earth()
+comment1.text=\r\n\ Create\ a\ new\ world.\ \r\n
+comment2.params=
+comment2.target=void\ act()
+comment3.params=x\ y
+comment3.target=boolean\ isWater(int,\ int)
+comment3.text=\r\n\ Return\ true,\ if\ the\ specified\ coordinate\ shows\ water.\r\n\ (Water\ is\ defined\ as\ a\ predominantly\ blueish\ color.)\r\n
+comment4.params=map
+comment4.target=void\ jumpToMap(int)
+comment4.text=\r\n\ Jump\ to\ the\ given\ map\ number\ (1..n).\r\n
+comment5.params=mapNo
+comment5.target=void\ showMap(int)
+comment5.text=\r\n\ Set\ up\ the\ start\ scene.\r\n
+comment6.params=time
+comment6.target=void\ mapFinished(int)
+comment6.text=\r\n\ Game\ is\ over.\ Stop\ running,\ display\ score.\r\n
+comment7.params=time
+comment7.target=void\ displayScore(int)
+comment8.params=
+comment8.target=void\ displayFinalScore()
+comment9.params=
+comment9.target=void\ clearWorld()
+numComments=10
