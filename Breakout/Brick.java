@@ -8,6 +8,10 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
  */
 public class Brick extends Actor
 {
+    public int level;
+    public Brick() {
+        this.level = 1;
+    }
     /**
      * Act - do whatever the Brick wants to do. This method is called whenever
      * the 'Act' or 'Run' button gets pressed in the environment.
@@ -15,5 +19,9 @@ public class Brick extends Actor
     public void act() 
     {
         
-    }    
+    }
+    
+    public void setLevel(int l) {
+        level = l;
+    }
 }

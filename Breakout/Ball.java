@@ -10,7 +10,6 @@ public class Ball extends Actor
 {
     int dx = 0;
     int dy = 3;
-    
     /**
      * Act - do whatever the Ball wants to do. This method is called whenever
      * the 'Act' or 'Run' button gets pressed in the environment.
@@ -35,49 +34,40 @@ public class Ball extends Actor
         }
         
         if (isTouching(Brick.class)) {
-            double theta = Math.atan2(getY() - getOneIntersectingObject(Brick.class).getY(), getX() - getOneIntersectingObject(Brick.class).getX());
-            int r = 3;
-            dx = (int) (r * Math.cos(theta));
-            dy = (int) (r * Math.sin(theta));
-            if (Math.abs(dx) < 1) {
-                if (dx < 0) {
-                    dx = -1;
-                } else {
-                    dx = 1;
-                }
-            }
-            if (Math.abs(dy) < 1) {
-                if (dy < 0) {
-                    dy = -1;
-                } else {
-                    dy = 1;
-                }
-            }
+            bounce(Brick.class);
             
-            removeTouching(Brick.class);
+            if (getOneIntersectingObject(Brick.class).level == 1) {
+                removeTouching(Brick.class);
+            } else {
+                getOneIntersectingObject(Brick.class).setLevel(getOneIntersectingObject(Brick.class).level - 1);
+            }
         }
         
         if (isTouching(Paddle.class)) {
-            double theta = Math.atan2(getY() - getOneIntersectingObject(Paddle.class).getY(), getX() - getOneIntersectingObject(Paddle.class).getX());
-            int r = 3;
-            dx = (int) (r * Math.cos(theta));
-            dy = (int) (r * Math.sin(theta));
-            if (Math.abs(dx) < 1) {
-                if (dx < 0) {
-                    dx = -1;
-                } else {
-                    dx = 1;
-                }
-            }
-            if (Math.abs(dy) < 1) {
-                if (dy < 0) {
-                    dy = -1;
-                } else {
-                    dy = 1;
-                }
-            }
+            bounce(Paddle.class);
         }
        
         setLocation(getX() + dx, getY() + dy);
+    }
+    
+    public void bounce(java.lang.Class type) {
+        double theta = Math.atan2(getY() - getOneIntersectingObject(type).getY(), getX() - getOneIntersectingObject(type).getX());
+        int r = 3;
+        dx = (int) (r * Math.cos(theta));
+        dy = (int) (r * Math.sin(theta));
+        if (Math.abs(dx) < 1) {
+            if (dx < 0) {
+                dx = -1;
+            } else {
+                dx = 1;
+            }
+        }
+        if (Math.abs(dy) < 1) {
+            if (dy < 0) {
+                dy = -1;
+            } else {
+                dy = 1;
+            }
+        }
     }
 }
