@@ -10,6 +10,45 @@ public class Ball extends Actor
 {
     int dx = 0;
     int dy = 3;
+    
+    String[][] colors;
+    
+    public Ball() {
+        colors = new String[2][7];
+        colors = new String[][] {
+            {
+                "blue", 
+                "brown",  
+                "gray", 
+                "green", 
+                "orange",  
+                "purple", 
+                "red",
+            },
+            {
+                "stripebluedarkgreen", 
+                "stripebluedarkorange", 
+                "stripebluegreen",
+                "stripeblueorange", 
+                "stripebluepurple",
+                "stripebluered", 
+                "stripedarkorangepurple", 
+                // "stripegrayorange", 
+                // "stripegraypurple", 
+                // "stripegreendarkorange",
+                // "stripegreengray", 
+                // "stripegreenorange", 
+                // "stripegreenpurple",
+                // "stripegreenred", 
+                // "stripeorangepurple",
+                // "stripepurpleorange", 
+                // "stripereddarkorange", 
+                // "striperedgray", 
+                // "striperedorange", 
+                // "striperedpurple"
+            }
+        };
+    }
     /**
      * Act - do whatever the Ball wants to do. This method is called whenever
      * the 'Act' or 'Run' button gets pressed in the environment.
@@ -36,10 +75,12 @@ public class Ball extends Actor
         if (isTouching(Brick.class)) {
             bounce(Brick.class);
             
-            if (getOneIntersectingObject(Brick.class).level == 1) {
+            Brick brick = getIntersectingObjects(Brick.class).get(0);
+            if (brick.getLevel() == 1) {
                 removeTouching(Brick.class);
             } else {
-                getOneIntersectingObject(Brick.class).setLevel(getOneIntersectingObject(Brick.class).level - 1);
+                brick.setLevel(brick.getLevel() - 1);
+                brick.setImage("brick" + colors[0][Greenfoot.getRandomNumber(colors[0].length)] + ".png");
             }
         }
         
@@ -57,16 +98,16 @@ public class Ball extends Actor
         dy = (int) (r * Math.sin(theta));
         if (Math.abs(dx) < 1) {
             if (dx < 0) {
-                dx = -1;
+                dx += -1;
             } else {
-                dx = 1;
+                dx += 1;
             }
         }
         if (Math.abs(dy) < 1) {
             if (dy < 0) {
-                dy = -1;
+                dy += -1;
             } else {
-                dy = 1;
+                dy += 1;
             }
         }
     }
