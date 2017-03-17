@@ -3,8 +3,8 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 /**
  * Write a description of class Brick here.
  * 
- * @author (your name) 
- * @version (a version number or a date)
+ * @author (Shaw Kagawa) 
+ * @version (3/17/17)
  */
 public class Brick extends Actor
 {

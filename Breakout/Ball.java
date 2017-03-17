@@ -9,90 +9,52 @@ import greenfoot.*;
 public class Ball extends Actor
 {
     int dx = 0;
-    int dy = 3;
+    int dy = -2;
     
-    String[][] colors;
-    
-    public Ball() {
-        colors = new String[2][7];
-        colors = new String[][] {
-            {
-                "blue", 
-                "brown",  
-                "gray", 
-                "green", 
-                "orange",  
-                "purple", 
-                "red",
-            },
-            {
-                "stripebluedarkgreen", 
-                "stripebluedarkorange", 
-                "stripebluegreen",
-                "stripeblueorange", 
-                "stripebluepurple",
-                "stripebluered", 
-                "stripedarkorangepurple", 
-                // "stripegrayorange", 
-                // "stripegraypurple", 
-                // "stripegreendarkorange",
-                // "stripegreengray", 
-                // "stripegreenorange", 
-                // "stripegreenpurple",
-                // "stripegreenred", 
-                // "stripeorangepurple",
-                // "stripepurpleorange", 
-                // "stripereddarkorange", 
-                // "striperedgray", 
-                // "striperedorange", 
-                // "striperedpurple"
-            }
-        };
-    }
     /**
      * Act - do whatever the Ball wants to do. This method is called whenever
      * the 'Act' or 'Run' button gets pressed in the environment.
      */
     public void act() 
     {
-        if ((getX() > getWorld().getWidth() - getImage().getWidth()/2)) {
+        if ((getX() >= getWorld().getWidth() - getImage().getWidth()/2)) {
             dx = -dx;
             setLocation(getWorld().getWidth() - getImage().getWidth()/2, getY());
         }
-        if (getX() < getImage().getWidth()/2) {
+        if (getX() <= getImage().getWidth()/2) {
             dx = -dx;
             setLocation(getImage().getWidth()/2, getY());
         }
         
-        if (getY() < getImage().getHeight()/2) {
+        if (getY() <= getImage().getHeight()/2) {
             dy = -dy;
         }
-        if (getY() > getWorld().getHeight() - getImage().getHeight()/2) {
+        if (getY() >= getWorld().getHeight() - getImage().getHeight()/2) {
             // game over
             Greenfoot.stop();
         }
         
         if (isTouching(Brick.class)) {
-            bounce(Brick.class);
-            
             Brick brick = getIntersectingObjects(Brick.class).get(0);
+            
+            bounce(brick);
             if (brick.getLevel() == 1) {
                 removeTouching(Brick.class);
             } else {
                 brick.setLevel(brick.getLevel() - 1);
-                brick.setImage("brick" + colors[0][Greenfoot.getRandomNumber(colors[0].length)] + ".png");
+                brick.setImage("brick" + MyWorld.colors[0][Greenfoot.getRandomNumber(MyWorld.colors[0].length)] + ".png");
             }
         }
         
         if (isTouching(Paddle.class)) {
-            bounce(Paddle.class);
+            bounce(getIntersectingObjects(Paddle.class).get(0));
         }
        
         setLocation(getX() + dx, getY() + dy);
     }
     
-    public void bounce(java.lang.Class type) {
-        double theta = Math.atan2(getY() - getOneIntersectingObject(type).getY(), getX() - getOneIntersectingObject(type).getX());
+    private void bounce(Actor thing) {
+        double theta = Math.atan2(getY() - thing.getY(), getX() - thing.getX());
         int r = 3;
         dx = (int) (r * Math.cos(theta));
         dy = (int) (r * Math.sin(theta));

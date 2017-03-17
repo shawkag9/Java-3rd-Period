@@ -13,7 +13,7 @@ public class MyWorld extends World
     public Brick brick;
     public int brickW;
     public int brickH;
-    public String[][] colors;
+    public static String[][] colors;
     public int width;
     public int height;
     /**
@@ -30,7 +30,7 @@ public class MyWorld extends World
         height = getHeight();
         
         ball = new Ball();
-        addObject(ball, width/2, height/2);
+        addObject(ball, width/2, height / 2);
         paddle = new Paddle();
         addObject(paddle, width/2, height - paddle.getImage().getHeight()/2);
 
@@ -50,25 +50,25 @@ public class MyWorld extends World
                 "red",
             },
             {
-                "stripebluedarkgreen", 
+                // "stripebluedarkgreen", 
                 "stripebluedarkorange", 
-                "stripebluegreen",
-                "stripeblueorange", 
-                "stripebluepurple",
+                // "stripebluegreen",
+                // "stripeblueorange", 
+                // "stripebluepurple",
                 "stripebluered", 
                 "stripedarkorangepurple", 
                 // "stripegrayorange", 
-                // "stripegraypurple", 
+                "stripegraypurple", 
                 // "stripegreendarkorange",
                 // "stripegreengray", 
-                // "stripegreenorange", 
+                "stripegreenorange", 
                 // "stripegreenpurple",
                 // "stripegreenred", 
                 // "stripeorangepurple",
-                // "stripepurpleorange", 
+                "stripepurpleorange", 
                 // "stripereddarkorange", 
-                // "striperedgray", 
-                // "striperedorange", 
+                "striperedgray", 
+                "striperedorange", 
                 // "striperedpurple"
             }
         };
@@ -76,14 +76,14 @@ public class MyWorld extends World
         drawLevel(Greenfoot.getRandomNumber(3) + 1);
     }
     
-    public void reset() {
-        Ball ball = new Ball();
-        addObject(ball, width/2, height/2);
-        Paddle paddle = new Paddle();
-        addObject(paddle, width/2, height - paddle.getImage().getHeight()/2);
+    // public void reset() {
+        // Ball ball = new Ball();
+        // addObject(ball, width/2, height * 3 / 4);
+        // Paddle paddle = new Paddle();
+        // addObject(paddle, width/2, height - paddle.getImage().getHeight()/2);
         
-        drawLevel(Greenfoot.getRandomNumber(3) + 1);
-    }
+        // drawLevel(Greenfoot.getRandomNumber(3) + 1);
+    // }
 
     public void drawLevel(int level) {
         switch (level) {
@@ -98,7 +98,7 @@ public class MyWorld extends World
                     brickLine(
                         (int)(brickW * 3 / 2), 
                         (int)(brickH * 3 / 2) + i * brickH, 
-                        (int)(width / brickW) - 2, 
+                        (int)(width / brickW) - 2 + 1, 
                         new String[] {
                             colors[levels[0]][Greenfoot.getRandomNumber(colors[levels[0]].length)],
                             colors[levels[1]][Greenfoot.getRandomNumber(colors[levels[1]].length)],
@@ -164,8 +164,8 @@ public class MyWorld extends World
     public void brickBox(int x, int y, int width, int height, String[] color) {
         for (int i = 0; i < height; i++) {
             brickLine(
-                x - (int)(width * brickW / 2), 
-                y - (int)(height * brickH / 2) + i * brickH, 
+                x - (int)(width * brickW / 2) + 1, 
+                y - (int)(height * brickH / 2) + 1 + i * brickH, 
                 width, 
                 color
             );
@@ -185,10 +185,10 @@ public class MyWorld extends World
     public void placeBrick(int x, int y, String color) {
         Brick brick = new Brick();
         brick.setImage("brick" + color + ".png");
-        if (color.length() < 7) {
-            brick.setLevel(1);
-        } else if (color.substring(0,6).equals("stripe")) {
+        if (color.length() > 6 && color.substring(0,6).equals("stripe")) {
             brick.setLevel(2);
+        } else {
+            brick.setLevel(1);
         }
         addObject(brick, x, y);
     }

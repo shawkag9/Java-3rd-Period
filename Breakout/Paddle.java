@@ -15,9 +15,9 @@ public class Paddle extends Actor
      */
     public void act() 
     {
-        if (Greenfoot.isKeyDown("left") && (getX() > 0)) {
+        if (Greenfoot.isKeyDown("left") && (getX() > getImage().getWidth()/2)) {
             setLocation(getX() - dx, getY());
-        } else if (Greenfoot.isKeyDown("right") && (getX() < getWorld().getWidth())) {
+        } else if (Greenfoot.isKeyDown("right") && (getX() < getWorld().getWidth() - getImage().getWidth()/2)) {
             setLocation(getX() + dx, getY());
         }
     }    
