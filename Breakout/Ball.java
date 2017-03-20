@@ -41,7 +41,7 @@ public class Ball extends Actor
                 getWorld().removeObject(brick);
             } else {
                 brick.setLevel(brick.getLevel() - 1);
-                brick.setImage("brick" + MyWorld.colors[0][Greenfoot.getRandomNumber(MyWorld.colors[0].length)] + ".png");
+                brick.setImage("brick" + MyWorld.colors[Greenfoot.getRandomNumber(MyWorld.colors.length)] + ".png");
             }
         }
         if (isTouching(Paddle.class)) {
@@ -52,13 +52,13 @@ public class Ball extends Actor
     }
     
     private void bounce(Actor thing) {
-        boolean x_edge = getX() - thing.getX() < 0 || getX() - thing.getX() > thing.getImage().getWidth()/2;
-        boolean y_edge = getY() - thing.getY() < 0 || getY() - thing.getY() > thing.getImage().getHeight()/2;
+        boolean x_edge = getX() - thing.getX() < -thing.getImage().getWidth()/2 || getX() - thing.getX() > thing.getImage().getWidth()/2;
+        boolean y_edge = getY() - thing.getY() < -thing.getImage().getHeight()/2 || getY() - thing.getY() > thing.getImage().getHeight()/2;
         if (x_edge && y_edge) {
             double theta = Math.atan2(getY() - thing.getY(), getX() - thing.getX());
-            int r = 3;
-            dx = (int) (r * Math.cos(theta));
-            dy = (int) (r * Math.sin(theta));
+            int speed = 3;
+            dx = (int) (speed * Math.cos(theta));
+            dy = (int) (speed * Math.sin(theta));
             if (Math.abs(dx) < 1) {
                 if (dx < 0) {
                     dx += -1;

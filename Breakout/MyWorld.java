@@ -13,7 +13,7 @@ public class MyWorld extends World
     private Brick brick;
     private int brickW;
     private int brickH;
-    public static String[][] colors;
+    public static String[] colors;
     private int width;
     private int height;
     private String state = "menu";
@@ -56,39 +56,13 @@ public class MyWorld extends World
             brickW = brick.getImage().getWidth()*2;
             brickH = brick.getImage().getHeight();
             
-            colors = new String[2][7];
-            colors = new String[][] {
-                {
-                    "blue", 
+            colors = new String[] {
                     "brown",  
                     "gray", 
                     "green", 
                     "orange",  
                     "purple", 
                     "red",
-                },
-                {
-                    // "stripebluedarkgreen", 
-                    "stripebluedarkorange", 
-                    // "stripebluegreen",
-                    // "stripeblueorange", 
-                    // "stripebluepurple",
-                    "stripebluered", 
-                    "stripedarkorangepurple", 
-                    // "stripegrayorange", 
-                    "stripegraypurple", 
-                    // "stripegreendarkorange",
-                    // "stripegreengray", 
-                    "stripegreenorange", 
-                    // "stripegreenpurple",
-                    // "stripegreenred", 
-                    // "stripeorangepurple",
-                    "stripepurpleorange", 
-                    // "stripereddarkorange", 
-                    "striperedgray", 
-                    "striperedorange", 
-                    // "striperedpurple"
-                }
             };
     
             drawLevel(Greenfoot.getRandomNumber(3) + 1);
@@ -114,32 +88,28 @@ public class MyWorld extends World
                         Greenfoot.getRandomNumber(2),
                         Greenfoot.getRandomNumber(2)
                     };
-                    String test = colors[levels[0]][Greenfoot.getRandomNumber(colors[levels[0]].length)];
                     brickLine(
                         (int)(brickW * 3 / 2), 
                         (int)(brickH * 3 / 2) + i * brickH, 
                         (int)(width / brickW) - 2 + 1, 
+                        new int[] {3, 2},
                         new String[] {
-                            colors[levels[0]][Greenfoot.getRandomNumber(colors[levels[0]].length)],
-                            colors[levels[1]][Greenfoot.getRandomNumber(colors[levels[1]].length)]
+                            colors[Greenfoot.getRandomNumber(colors.length)],
+                            colors[Greenfoot.getRandomNumber(colors.length)]
                         }
                     );
                 }
                 break;
             case 2:
                 for (int i = 0; i < 10; i++) {
-                    int[] levels = {
-                            Greenfoot.getRandomNumber(2),
-                            Greenfoot.getRandomNumber(2),
-                            Greenfoot.getRandomNumber(2)
-                        };
                     brickLine(
                         (int)(brickW * 3 / 2) + i * brickW, 
                         (int)(brickH * 3 / 2) + 2 * i * brickH, 
                         (int)(width / brickW) - 1 - i * 2, 
+                        new int[] {3, 2},
                         new String[] {
-                            colors[levels[0]][Greenfoot.getRandomNumber(colors[levels[0]].length)],
-                            colors[levels[1]][Greenfoot.getRandomNumber(colors[levels[1]].length)]
+                            colors[Greenfoot.getRandomNumber(colors.length)],
+                            colors[Greenfoot.getRandomNumber(colors.length)]
                         }
                     );
                 }
@@ -156,18 +126,18 @@ public class MyWorld extends World
                         {(int)(width * 0.75), (int)(height * 0.75)}
                     };
                 int[] levels = {
-                        Greenfoot.getRandomNumber(2),
-                        Greenfoot.getRandomNumber(2),
-                        Greenfoot.getRandomNumber(2)
-                    };
+                    Greenfoot.getRandomNumber(2),
+                    Greenfoot.getRandomNumber(2),
+                    Greenfoot.getRandomNumber(2)
+                };
                 for (int i = 0; i < boxLocations.length; i++) {
                     brickBox(
                         boxLocations[i][0], 
                         boxLocations[i][1], 
                         4, 4,
                         new String[] {
-                            colors[levels[0]][Greenfoot.getRandomNumber(colors[levels[0]].length)],
-                            colors[levels[1]][Greenfoot.getRandomNumber(colors[levels[1]].length)]
+                            colors[Greenfoot.getRandomNumber(colors.length)],
+                            colors[Greenfoot.getRandomNumber(colors.length)]
                         }
                     );
                 }
@@ -182,31 +152,30 @@ public class MyWorld extends World
         for (int i = 0; i < height; i++) {
             brickLine(
                 x - (int)(width * brickW / 2) + 1, 
-                y - (int)(height * brickH / 2) + 1 + i * brickH, 
+                y - (int)(height * brickH / 2) + 1 + i * brickH,
                 width, 
+                new int[] {3, 2},
                 color
             );
         }
     }
 
-    public void brickLine(int x, int y, int length, String[] color) {
+    public void brickLine(int x, int y, int length, int[] levels, String[] color) {
         for (int i = 0; i < length; i++) {
             placeBrick(
                 x + i * brickW, 
-                y, 
+                y,
+                levels[i % levels.length],
                 color[i % color.length]
             );
         }
     }
 
-    public void placeBrick(int x, int y, String color) {
+    public void placeBrick(int x, int y, int level, String color) {
         Brick brick = new Brick();
-        brick.setImage("brick" + color + ".png");
-        if (color.length() > 6 && color.substring(0,6).equals("stripe")) {
-            brick.setLevel(2);
-        } else {
-            brick.setLevel(1);
-        }
+        brick.setImage("brick" + level + color + ".png");
+        brick.setLevel(level);
+        brick.setColor(color);
         addObject(brick, x, y);
     }
 }
