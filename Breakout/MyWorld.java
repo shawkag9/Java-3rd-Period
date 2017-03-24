@@ -49,13 +49,13 @@ public class MyWorld extends World
             level = (level + 1) % 3 + 1;
             state = flow[(Arrays.asList(flow).indexOf(state) + 1) % flow.length];
             loadState(state);
+            keyUp = false;
         } else {
             stateChanged = currState != state;
             currState = state;
-            keyUp = wasKeyDown == Greenfoot.isKeyDown("space");
+            keyUp = wasKeyDown && !Greenfoot.isKeyDown("space");
             wasKeyDown = Greenfoot.isKeyDown("space");
         }
-        System.out.println(keyUp);
     }
     
     public void loadState(String state) {
@@ -66,21 +66,23 @@ public class MyWorld extends World
                 
                 ball = new Ball();
                 paddle = new Paddle();
+                paddle.setImage("\\paddles\\metalPaddle007.png");
                 brick = new Brick();
                 break;
             case "playing":
+                if (!getObjects(Title.class).isEmpty()) removeObjects(getObjects(Title.class));
                 addObject(ball, width/2, height / 2);
                 addObject(paddle, width/2, height - paddle.getImage().getHeight()/2);
                 brickW = brick.getImage().getWidth()*2;
                 brickH = brick.getImage().getHeight();
                 
                 colors = new String[] {
-                        "brown",  
-                        "gray", 
-                        "green", 
-                        "orange",  
-                        "purple", 
-                        "red",
+                    "brown",  
+                    "gray", 
+                    "green", 
+                    "orange",  
+                    "purple", 
+                    "red",
                 };
         
                 drawLevel(level);
