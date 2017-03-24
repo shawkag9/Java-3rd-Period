@@ -20,7 +20,7 @@ public class MyWorld extends World
     private String currState;
     private boolean stateChanged;
     private boolean wasKeyDown;
-    private boolean keyUp;
+    private boolean spaceUp;
     private int level;
     private String[] flow;
     /**
@@ -36,8 +36,14 @@ public class MyWorld extends World
         width = getWidth();
         height = getHeight();
         stateChanged = false;
-        keyUp = false;
-        flow = new String[] {"menu", "playing", "win"};
+        spaceUp = false;
+        flow = new String[] {
+            "menu", 
+            "playing",
+            "playing",
+            "playing",
+            "win"
+        };
         
         level = 0;
         state = "menu";
@@ -45,16 +51,71 @@ public class MyWorld extends World
         loadState(state);
     }
     public void act() {
-        if (keyUp) {
-            level = (level + 1) % 3 + 1;
-            state = flow[(Arrays.asList(flow).indexOf(state) + 1) % flow.length];
-            loadState(state);
-            keyUp = false;
-        } else {
-            stateChanged = currState != state;
-            currState = state;
-            keyUp = wasKeyDown && !Greenfoot.isKeyDown("space");
-            wasKeyDown = Greenfoot.isKeyDown("space");
+        // if (spaceUp) {
+            // state = flow[(Arrays.asList(flow).indexOf(state) + 1) % flow.length];
+            // if (state.equals("playing")) level = (level + 1) % 3 + 1;
+            // loadState(state);
+            // spaceUp = false;
+        // } else {
+            // stateChanged = currState != state;
+            // currState = state;
+            // spaceUp = wasKeyDown && !Greenfoot.isKeyDown("space");
+            // wasKeyDown = Greenfoot.isKeyDown("space");
+        // }
+        switch(state) {
+            case "menu":
+                if (spaceUp) {
+                    state = "playing";
+                    level = 1;
+                    loadState(state);
+                    
+                    spaceUp = false;
+                    wasKeyDown = false;
+                } else {
+                    // stateChanged = currState != state;
+                    // currState = state;
+                    spaceUp = wasKeyDown && !Greenfoot.isKeyDown("space");
+                    wasKeyDown = Greenfoot.isKeyDown("space");
+                }
+                break;
+            case "playing":
+                if (spaceUp) {
+                    if (!getObjects(Ball.class).get(0).playing) {
+                        getObjects(Ball.class).get(0).playing = true;
+                    }
+                    
+                    spaceUp = false;
+                    wasKeyDown = false;
+                } else {
+                    // stateChanged = currState != state;
+                    // currState = state;
+                    spaceUp = wasKeyDown && !Greenfoot.isKeyDown("space");
+                    wasKeyDown = Greenfoot.isKeyDown("space");
+                }
+                if (getObjects(Brick.class).isEmpty()) {
+                    removeObjects(getObjects(Ball.class));
+                    if (level < 3) {
+                        level++;
+                        loadState(state);
+                    } else {
+                        state = "win";
+                    }
+                }
+                break;
+            case "win":
+                if (spaceUp) {
+                    removeObjects(getObjects(null));
+                    loadState(state);
+                    
+                    spaceUp = false;
+                    wasKeyDown = false;
+                } else {
+                    // stateChanged = currState != state;
+                    // currState = state;
+                    spaceUp = wasKeyDown && !Greenfoot.isKeyDown("space");
+                    wasKeyDown = Greenfoot.isKeyDown("space");
+                }
+                break;
         }
     }
     
@@ -70,8 +131,10 @@ public class MyWorld extends World
                 brick = new Brick();
                 break;
             case "playing":
+                
                 if (!getObjects(Title.class).isEmpty()) removeObjects(getObjects(Title.class));
                 addObject(ball, width/2, height / 2);
+                getObjects(Ball.class).get(0).playing = false;
                 addObject(paddle, width/2, height - paddle.getImage().getHeight()/2);
                 brickW = brick.getImage().getWidth()*2;
                 brickH = brick.getImage().getHeight();
@@ -88,6 +151,7 @@ public class MyWorld extends World
                 drawLevel(level);
                 break;
             case "win":
+                showText("You win!", getWidth()/2, getHeight()/2);
                 break;
         }
     }

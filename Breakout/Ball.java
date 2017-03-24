@@ -10,44 +10,46 @@ public class Ball extends Actor
 {
     int dx = 1;
     int dy = 2;
-    
+    public static boolean playing = false;
     /**
      * Act - do whatever the Ball wants to do. This method is called whenever
      * the 'Act' or 'Run' button gets pressed in the environment.
      */
     public void act() 
     {
-        if ((getX() >= getWorld().getWidth() - getImage().getWidth()/2)) {
-            dx = -dx;
-            setLocation(getWorld().getWidth() - getImage().getWidth()/2, getY());
-        }
-        if (getX() <= getImage().getWidth()/2) {
-            dx = -dx;
-            setLocation(getImage().getWidth()/2, getY());
-        }
-        
-        if (getY() <= getImage().getHeight()/2) {
-            dy = -dy;
-        }
-        if (getY() >= getWorld().getHeight() - getImage().getHeight()/2) {
-            // game over
-            Greenfoot.stop();
-        }
-        
-        if (isTouching(Brick.class)) {
-            Brick brick = getIntersectingObjects(Brick.class).get(0);
-            bounce(brick);
-            if (brick.getLevel() == 1) {
-                getWorld().removeObject(brick);
-            } else {
-                brick.setLevel(brick.getLevel() - 1);
+        if (playing) {
+            if ((getX() >= getWorld().getWidth() - getImage().getWidth()/2)) {
+                dx = -dx;
+                setLocation(getWorld().getWidth() - getImage().getWidth()/2, getY());
             }
+            if (getX() <= getImage().getWidth()/2) {
+                dx = -dx;
+                setLocation(getImage().getWidth()/2, getY());
+            }
+            
+            if (getY() <= getImage().getHeight()/2) {
+                dy = -dy;
+            }
+            if (getY() >= getWorld().getHeight() - getImage().getHeight()/2) {
+                // game over
+                Greenfoot.stop();
+            }
+            
+            if (isTouching(Brick.class)) {
+                Brick brick = getIntersectingObjects(Brick.class).get(0);
+                bounce(brick);
+                if (brick.getLevel() == 1) {
+                    getWorld().removeObject(brick);
+                } else {
+                    brick.setLevel(brick.getLevel() - 1);
+                }
+            }
+            if (isTouching(Paddle.class)) {
+                bounce(getIntersectingObjects(Paddle.class).get(0));
+            }
+            System.out.println(dx + ", " + dy);
+            setLocation(getX() + dx, getY() + dy);
         }
-        if (isTouching(Paddle.class)) {
-            bounce(getIntersectingObjects(Paddle.class).get(0));
-        }
-        
-        setLocation(getX() + dx, getY() + dy);
     }
     
     private void bounce(Actor thing) {
@@ -58,25 +60,26 @@ public class Ball extends Actor
             int speed = 3;
             dx = (int) (speed * Math.cos(theta));
             dy = (int) (speed * Math.sin(theta));
-            if (Math.abs(dx) < 1) {
-                if (dx < 0) {
-                    dx += -1;
-                } else {
-                    dx += 1;
-                }
-            }
-            if (Math.abs(dy) < 1) {
-                if (dy < 0) {
-                    dy += -1;
-                } else {
-                    dy += 1;
-                }
-            }
+            
         } else {
             if (!x_edge && y_edge) {
                 dy = -dy;
             } else if (!y_edge && x_edge) {
                 dx = -dx;
+            }
+        }
+        if (Math.abs(dx) < 1) {
+            if (dx < 0) {
+                dx = -1;
+            } else {
+                dx = 1;
+            }
+        }
+        if (Math.abs(dy) < 1) {
+            if (dy < 0) {
+                dy = -1;
+            } else {
+                dy = 1;
             }
         }
     }

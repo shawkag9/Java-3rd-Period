@@ -15,7 +15,9 @@ public class Paddle extends Actor
      */
     public void act() 
     {
-        setLocation(getWorld().getObjects(Ball.class).get(0).getX(), getY());
+        if (!getWorld().getObjects(Ball.class).isEmpty()) {
+            setLocation(getWorld().getObjects(Ball.class).get(0).getX(), getY());
+        }
         // if (Greenfoot.isKeyDown("left") && (getX() > getImage().getWidth()/2)) {
             // setLocation(getX() - dx, getY());
         // } else if (Greenfoot.isKeyDown("right") && (getX() < getWorld().getWidth() - getImage().getWidth()/2)) {
