@@ -1,5 +1,5 @@
 import greenfoot.*;
-
+import java.util.*;
 /**
  * Write a description of class MyWorld here.
  * 
@@ -16,7 +16,13 @@ public class MyWorld extends World
     public static String[] colors;
     private int width;
     private int height;
-    private String state = "menu";
+    private String state;
+    private String currState;
+    private boolean stateChanged;
+    private boolean wasKeyDown;
+    private boolean keyUp;
+    private int level;
+    private String[] flow;
     /**
      * Constructor for objects of class MyWorld.
      * 
@@ -29,55 +35,60 @@ public class MyWorld extends World
         
         width = getWidth();
         height = getHeight();
+        stateChanged = false;
+        keyUp = false;
+        flow = new String[] {"menu", "playing", "win"};
         
-        states(state);
+        level = 0;
+        state = "menu";
+        currState = state;
+        loadState(state);
     }
     public void act() {
-        if (Greenfoot.isKeyDown("space") && state.equals("menu")) {
-            state = "playing";
-            states("playing");
+        if (keyUp) {
+            level = (level + 1) % 3 + 1;
+            state = flow[(Arrays.asList(flow).indexOf(state) + 1) % flow.length];
+            loadState(state);
+        } else {
+            stateChanged = currState != state;
+            currState = state;
+            keyUp = wasKeyDown == Greenfoot.isKeyDown("space");
+            wasKeyDown = Greenfoot.isKeyDown("space");
         }
+        System.out.println(keyUp);
     }
     
-    public void states(String state) {
-        boolean playing = false;
-        Title title = new Title();
-        ball = new Ball();
-        paddle = new Paddle();
-        brick = new Brick();
-        if (state.equals("menu")) {
-            addObject(title, width/2, height/2);
-        }   
-        if (state.equals("playing") && !playing) {
-            playing = true;
-            removeObject(getObjects(Title.class).get(0));
-            addObject(ball, width/2, height / 2);
-            addObject(paddle, width/2, height - paddle.getImage().getHeight()/2);
-            brickW = brick.getImage().getWidth()*2;
-            brickH = brick.getImage().getHeight();
-            
-            colors = new String[] {
-                    "brown",  
-                    "gray", 
-                    "green", 
-                    "orange",  
-                    "purple", 
-                    "red",
-            };
-    
-            drawLevel(Greenfoot.getRandomNumber(3) + 1);
-        }
-    }
-    
-    
-    // public void reset() {
-        // Ball ball = new Ball();
-        // addObject(ball, width/2, height * 3 / 4);
-        // Paddle paddle = new Paddle();
-        // addObject(paddle, width/2, height - paddle.getImage().getHeight()/2);
+    public void loadState(String state) {
+        switch(state) {
+            case "menu":
+                Title title = new Title();
+                addObject(title, width/2, height/2);
+                
+                ball = new Ball();
+                paddle = new Paddle();
+                brick = new Brick();
+                break;
+            case "playing":
+                addObject(ball, width/2, height / 2);
+                addObject(paddle, width/2, height - paddle.getImage().getHeight()/2);
+                brickW = brick.getImage().getWidth()*2;
+                brickH = brick.getImage().getHeight();
+                
+                colors = new String[] {
+                        "brown",  
+                        "gray", 
+                        "green", 
+                        "orange",  
+                        "purple", 
+                        "red",
+                };
         
-        // drawLevel(Greenfoot.getRandomNumber(3) + 1);
-    // }
+                drawLevel(level);
+                break;
+            case "win":
+                break;
+        }
+    }
 
     public void drawLevel(int level) {
         switch (level) {
@@ -173,9 +184,9 @@ public class MyWorld extends World
 
     public void placeBrick(int x, int y, int level, String color) {
         Brick brick = new Brick();
-        brick.setImage("brick" + level + color + ".png");
-        brick.setLevel(level);
         brick.setColor(color);
+        brick.setLevel(level);
+        
         addObject(brick, x, y);
     }
 }

@@ -19,6 +19,7 @@ public class Brick extends Actor
     }
     public void setLevel(int l) {
         this.level = l;
+        setImage("\\bricks\\" + this.color + "\\brick" + this.level + this.color + ".png");
     }
     
     private String color;

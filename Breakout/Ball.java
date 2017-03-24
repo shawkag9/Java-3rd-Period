@@ -41,7 +41,6 @@ public class Ball extends Actor
                 getWorld().removeObject(brick);
             } else {
                 brick.setLevel(brick.getLevel() - 1);
-                brick.setImage("brick" + MyWorld.colors[Greenfoot.getRandomNumber(MyWorld.colors.length)] + ".png");
             }
         }
         if (isTouching(Paddle.class)) {
