@@ -1,12 +1,12 @@
 import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 
 /**
- * Write a description of class Title here.
+ * Write a description of class Text here.
  * 
  * @author (your name) 
  * @version (a version number or a date)
  */
-public class Title extends Actor
+public class Text extends Actor
 {
     private static final int width = 600;
     private static final int height = 400;
@@ -18,7 +18,7 @@ public class Title extends Actor
     {
         
     }
-    public Title() {
+    public Text(String text) {
         GreenfootImage image = new GreenfootImage(width * 3 / 4, height * 3 / 4);
 
         image.setColor(new Color(0, 0, 0, 128));
@@ -29,8 +29,7 @@ public class Title extends Actor
         font = font.deriveFont(12);
         image.setFont(font);
         image.setColor(Color.WHITE);
-        image.drawString("Welcome!", 60, 100);
-        image.drawString("Press Space to start.", 60, 120);
+        image.drawString(text, 60, 100);
         setImage(image);
     }
 }

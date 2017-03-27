@@ -47,7 +47,6 @@ public class Ball extends Actor
             if (isTouching(Paddle.class)) {
                 bounce(getIntersectingObjects(Paddle.class).get(0));
             }
-            System.out.println(dx + ", " + dy);
             setLocation(getX() + dx, getY() + dy);
         }
     }

@@ -31,7 +31,7 @@ public class MyWorld extends World
     {    
         // Create a new world with 600x400 cells with a cell size of 1x1 pixels.
         super(600, 400, 1, false); 
-        setPaintOrder(Title.class, Ball.class, Paddle.class, Brick.class);
+        setPaintOrder(Text.class, Ball.class, Paddle.class, Brick.class);
         
         width = getWidth();
         height = getHeight();
@@ -51,17 +51,6 @@ public class MyWorld extends World
         loadState(state);
     }
     public void act() {
-        // if (spaceUp) {
-            // state = flow[(Arrays.asList(flow).indexOf(state) + 1) % flow.length];
-            // if (state.equals("playing")) level = (level + 1) % 3 + 1;
-            // loadState(state);
-            // spaceUp = false;
-        // } else {
-            // stateChanged = currState != state;
-            // currState = state;
-            // spaceUp = wasKeyDown && !Greenfoot.isKeyDown("space");
-            // wasKeyDown = Greenfoot.isKeyDown("space");
-        // }
         switch(state) {
             case "menu":
                 if (spaceUp) {
@@ -72,46 +61,58 @@ public class MyWorld extends World
                     spaceUp = false;
                     wasKeyDown = false;
                 } else {
-                    // stateChanged = currState != state;
-                    // currState = state;
                     spaceUp = wasKeyDown && !Greenfoot.isKeyDown("space");
                     wasKeyDown = Greenfoot.isKeyDown("space");
                 }
                 break;
             case "playing":
                 if (spaceUp) {
-                    if (!getObjects(Ball.class).get(0).playing) {
-                        getObjects(Ball.class).get(0).playing = true;
+                    Ball ball = getObjects(Ball.class).get(0);
+                    if (!ball.playing) {
+                        ball.playing = true;
                     }
                     
                     spaceUp = false;
                     wasKeyDown = false;
                 } else {
-                    // stateChanged = currState != state;
-                    // currState = state;
                     spaceUp = wasKeyDown && !Greenfoot.isKeyDown("space");
                     wasKeyDown = Greenfoot.isKeyDown("space");
                 }
                 if (getObjects(Brick.class).isEmpty()) {
-                    removeObjects(getObjects(Ball.class));
                     if (level < 3) {
                         level++;
                         loadState(state);
                     } else {
                         state = "win";
+                        loadState(state);
                     }
+                }
+                if (!getObjects(Ball.class).isEmpty() && getObjects(Ball.class).get(0).getY() > getHeight() - getObjects(Ball.class).get(0).getImage().getHeight()/2) {
+                    state = "game over";
+                    loadState(state);
                 }
                 break;
             case "win":
                 if (spaceUp) {
-                    removeObjects(getObjects(null));
+                    
+                    state = "menu";
                     loadState(state);
                     
                     spaceUp = false;
                     wasKeyDown = false;
                 } else {
-                    // stateChanged = currState != state;
-                    // currState = state;
+                    spaceUp = wasKeyDown && !Greenfoot.isKeyDown("space");
+                    wasKeyDown = Greenfoot.isKeyDown("space");
+                }
+                break;
+            case "game over":
+                if (spaceUp) {
+                    state = "menu";
+                    loadState(state);
+                    
+                    spaceUp = false;
+                    wasKeyDown = false;
+                } else {
                     spaceUp = wasKeyDown && !Greenfoot.isKeyDown("space");
                     wasKeyDown = Greenfoot.isKeyDown("space");
                 }
@@ -120,10 +121,10 @@ public class MyWorld extends World
     }
     
     public void loadState(String state) {
+        removeObjects(getObjects(null));
         switch(state) {
             case "menu":
-                Title title = new Title();
-                addObject(title, width/2, height/2);
+                addObject(new Text("Welcome!\nPress space to start"), getWidth()/2, getHeight()/2);
                 
                 ball = new Ball();
                 paddle = new Paddle();
@@ -131,8 +132,6 @@ public class MyWorld extends World
                 brick = new Brick();
                 break;
             case "playing":
-                
-                if (!getObjects(Title.class).isEmpty()) removeObjects(getObjects(Title.class));
                 addObject(ball, width/2, height / 2);
                 getObjects(Ball.class).get(0).playing = false;
                 addObject(paddle, width/2, height - paddle.getImage().getHeight()/2);
@@ -151,7 +150,10 @@ public class MyWorld extends World
                 drawLevel(level);
                 break;
             case "win":
-                showText("You win!", getWidth()/2, getHeight()/2);
+                addObject(new Text("You Win!"), getWidth()/2, getHeight()/2);
+                break;
+            case "game over":
+                addObject(new Text("Game Over!"), getWidth()/2, getHeight()/2);
                 break;
         }
     }
@@ -193,15 +195,15 @@ public class MyWorld extends World
                 break;
             case 3:
                 int[][] boxLocations = {
-                        {(int)(width * 0.25), (int)(height * 0.25)},
-                        {(int)(width * 0.50), (int)(height * 0.25)},
-                        {(int)(width * 0.75), (int)(height * 0.25)},
-                        {(int)(width * 0.33), (int)(height * 0.50)},
-                        {(int)(width * 0.66), (int)(height * 0.50)},
-                        {(int)(width * 0.25), (int)(height * 0.75)},
-                        {(int)(width * 0.50), (int)(height * 0.75)},
-                        {(int)(width * 0.75), (int)(height * 0.75)}
-                    };
+                    {(int)(width * 0.25), (int)(height * 0.25)},
+                    {(int)(width * 0.50), (int)(height * 0.25)},
+                    {(int)(width * 0.75), (int)(height * 0.25)},
+                    {(int)(width * 0.33), (int)(height * 0.50)},
+                    {(int)(width * 0.66), (int)(height * 0.50)},
+                    {(int)(width * 0.25), (int)(height * 0.75)},
+                    {(int)(width * 0.50), (int)(height * 0.75)},
+                    {(int)(width * 0.75), (int)(height * 0.75)}
+                };
                 int[] levels = {
                     Greenfoot.getRandomNumber(2),
                     Greenfoot.getRandomNumber(2),
