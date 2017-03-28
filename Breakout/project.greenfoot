@@ -1,5 +1,5 @@
 #Greenfoot properties
-#Mon Mar 27 09:39:13 PDT 2017
+#Tue Mar 28 10:08:20 PDT 2017
 class.Brick.image=brick012.png
 dependency9.type=UsesDependency
 target4.type=ClassTarget
@@ -27,6 +27,7 @@ class.Ball.image=ball.png
 dependency4.type=UsesDependency
 target2.width=80
 target5.name=MyWorld
+class.ExplodyBrick.superclass=Brick
 version=3.0.0
 dependency1.to=MyWorld
 dependency5.from=Title
@@ -37,6 +38,7 @@ dependency5.type=UsesDependency
 editor.fx.0.y=0
 editor.fx.0.x=397
 target2.typeParameters=
+class.StrongBrick.superclass=Brick
 dependency3.to=Brick
 target3.showInterface=false
 dependency4.to=Ball
@@ -87,11 +89,12 @@ target2.name=Paddle
 readme.name=@README
 target4.naviview.expanded=true
 package.numDependencies=9
-simulation.speed=53
+simulation.speed=100
 dependency8.from=MyWorld
 dependency8.type=UsesDependency
 target3.type=ClassTarget
 target4.width=80
+class.Text.superclass=greenfoot.Actor
 dependency2.from=Ball
 dependency2.type=UsesDependency
 target5.typeParameters=

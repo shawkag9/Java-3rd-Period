@@ -129,7 +129,7 @@ public class MyWorld extends World
                 ball = new Ball();
                 paddle = new Paddle();
                 paddle.setImage("\\paddles\\metalPaddle007.png");
-                brick = new Brick();
+                brick = new Brick(1, "");
                 break;
             case "playing":
                 addObject(ball, width/2, height / 2);
@@ -251,9 +251,14 @@ public class MyWorld extends World
     }
 
     public void placeBrick(int x, int y, int level, String color) {
-        Brick brick = new Brick();
-        brick.setColor(color);
-        brick.setLevel(level);
+        Brick brick;
+        if (Greenfoot.getRandomNumber(100) < 20) {
+            brick = new ExplodyBrick(1, color);
+        } else if (Greenfoot.getRandomNumber(100) < 20) {
+            brick = new StrongBrick(level, color);
+        } else {
+            brick = new Brick(1, color);
+        }
         
         addObject(brick, x, y);
     }

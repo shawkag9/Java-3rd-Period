@@ -18,36 +18,40 @@ public class Ball extends Actor
     public void act() 
     {
         if (playing) {
-            if ((getX() >= getWorld().getWidth() - getImage().getWidth()/2)) {
-                dx = -dx;
-                setLocation(getWorld().getWidth() - getImage().getWidth()/2, getY());
-            }
-            if (getX() <= getImage().getWidth()/2) {
-                dx = -dx;
-                setLocation(getImage().getWidth()/2, getY());
-            }
+            bounceOffWalls();
+            bounceOffStuff();
             
-            if (getY() <= getImage().getHeight()/2) {
-                dy = -dy;
-            }
-            if (getY() >= getWorld().getHeight() - getImage().getHeight()/2) {
-                // game over
-                Greenfoot.stop();
-            }
-            
-            if (isTouching(Brick.class)) {
-                Brick brick = getIntersectingObjects(Brick.class).get(0);
-                bounce(brick);
-                if (brick.getLevel() == 1) {
-                    getWorld().removeObject(brick);
-                } else {
-                    brick.setLevel(brick.getLevel() - 1);
-                }
-            }
-            if (isTouching(Paddle.class)) {
-                bounce(getIntersectingObjects(Paddle.class).get(0));
-            }
             setLocation(getX() + dx, getY() + dy);
+        }
+    }
+    
+    private void bounceOffWalls() {
+        if (getX() >= getWorld().getWidth() - getImage().getWidth()/2 + 2) {
+            dx = -dx;
+            setLocation(getWorld().getWidth() - getImage().getWidth()/2, getY());
+        }
+        if (getX() <= getImage().getWidth()/2 - 2) {
+            dx = -dx;
+            setLocation(getImage().getWidth()/2, getY());
+        }
+        
+        if (getY() <= getImage().getHeight()/2 - 2) {
+            dy = -dy;
+        }
+        if (getY() >= getWorld().getHeight() - getImage().getHeight()/2 + 1) {
+            // game over
+            Greenfoot.stop();
+        }
+    }
+    
+    private void bounceOffStuff() {
+        if (isTouching(Brick.class)) {
+            Brick brick = getIntersectingObjects(Brick.class).get(0);
+            bounce(brick);
+            brick.onHit();
+        }
+        if (isTouching(Paddle.class)) {
+            bounce(getIntersectingObjects(Paddle.class).get(0));
         }
     }
     
