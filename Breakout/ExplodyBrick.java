@@ -1,4 +1,5 @@
 import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
+import java.util.List;
 
 /**
  * Write a description of class ExplodyBrick here.
@@ -8,12 +9,20 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
  */
 public class ExplodyBrick extends Brick
 {
-    public ExplodyBrick(int level, String color) {
-        super(level, color);
+    public ExplodyBrick(String color) {
+        super(1, color);
     }
     
     @Override
     public void onHit() {
-        
+        List<Brick> bricks = getObjectsInRange(getImage().getWidth() * 4, Brick.class);
+        for (Brick brick: bricks) {
+            if (brick.level == 1) {
+                getWorld().removeObject(brick);
+            } else {
+                brick.onHit();
+            }
+        }
+        getWorld().removeObject(this);
     }
 }

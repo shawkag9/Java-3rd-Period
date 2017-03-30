@@ -37,6 +37,7 @@ public class Ball extends Actor
         
         if (getY() <= getImage().getHeight()/2 - 2) {
             dy = -dy;
+            setLocation(getX(), getImage().getHeight()/2 - 2);
         }
         if (getY() >= getWorld().getHeight() - getImage().getHeight()/2 + 1) {
             // game over
@@ -47,7 +48,7 @@ public class Ball extends Actor
     private void bounceOffStuff() {
         if (isTouching(Brick.class)) {
             Brick brick = getIntersectingObjects(Brick.class).get(0);
-            bounce(brick);
+            if (intersects(brick)) {bounce(brick);}
             brick.onHit();
         }
         if (isTouching(Paddle.class)) {

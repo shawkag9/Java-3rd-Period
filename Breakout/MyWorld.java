@@ -13,7 +13,7 @@ public class MyWorld extends World
     private Brick brick;
     private int brickW;
     private int brickH;
-    public static String[] colors;
+    private static String[] colors;
     private int width;
     private int height;
     private String state;
@@ -23,6 +23,7 @@ public class MyWorld extends World
     private boolean spaceUp;
     private int level;
     private String[] flow;
+    private int numLevels;
     /**
      * Constructor for objects of class MyWorld.
      * 
@@ -32,24 +33,19 @@ public class MyWorld extends World
         // Create a new world with 600x400 cells with a cell size of 1x1 pixels.
         super(600, 400, 1, false); 
         setPaintOrder(Text.class, Ball.class, Paddle.class, Brick.class);
+        setActOrder(Brick.class, Ball.class);
         
         width = getWidth();
         height = getHeight();
         stateChanged = false;
         spaceUp = false;
-        flow = new String[] {
-            "menu", 
-            "playing",
-            "playing",
-            "playing",
-            "win"
-        };
         
-        level = 0;
+        numLevels = 6;
         state = "menu";
         currState = state;
         loadState(state);
     }
+    
     public void act() {
         switch(state) {
             case "menu":
@@ -79,7 +75,7 @@ public class MyWorld extends World
                     wasKeyDown = Greenfoot.isKeyDown("space");
                 }
                 if (getObjects(Brick.class).isEmpty()) {
-                    if (level < 3) {
+                    if (level < numLevels) {
                         level++;
                         loadState(state);
                     } else {
@@ -94,7 +90,6 @@ public class MyWorld extends World
                 break;
             case "win":
                 if (spaceUp) {
-                    
                     state = "menu";
                     loadState(state);
                     
@@ -120,7 +115,7 @@ public class MyWorld extends World
         }
     }
     
-    public void loadState(String state) {
+    private void loadState(String state) {
         removeObjects(getObjects(null));
         switch(state) {
             case "menu":
@@ -129,13 +124,13 @@ public class MyWorld extends World
                 ball = new Ball();
                 paddle = new Paddle();
                 paddle.setImage("\\paddles\\metalPaddle007.png");
-                brick = new Brick(1, "");
+                brick = new Brick(1, "red");
                 break;
             case "playing":
                 addObject(ball, width/2, height / 2);
                 getObjects(Ball.class).get(0).playing = false;
                 addObject(paddle, width/2, height - paddle.getImage().getHeight()/2);
-                brickW = brick.getImage().getWidth()*2;
+                brickW = brick.getImage().getWidth();
                 brickH = brick.getImage().getHeight();
                 
                 colors = new String[] {
@@ -158,24 +153,19 @@ public class MyWorld extends World
         }
     }
 
-    public void drawLevel(int level) {
+    private void drawLevel(int level) {
+        String[] level_colors = new String[] {
+                                  colors[Greenfoot.getRandomNumber(colors.length)],
+                                  colors[Greenfoot.getRandomNumber(colors.length)]
+                                };
         switch (level) {
             case 1:
                 for (int i = 0; i < 5; i++) {
-                    int[] levels = {
-                        Greenfoot.getRandomNumber(2),
-                        Greenfoot.getRandomNumber(2),
-                        Greenfoot.getRandomNumber(2)
-                    };
                     brickLine(
-                        (int)(brickW * 3 / 2), 
-                        (int)(brickH * 3 / 2) + i * brickH, 
-                        (int)(width / brickW) - 2 + 1, 
-                        new int[] {3, 2},
-                        new String[] {
-                            colors[Greenfoot.getRandomNumber(colors.length)],
-                            colors[Greenfoot.getRandomNumber(colors.length)]
-                        }
+                        (int)(brickW * 3 / 2) + brickW, 
+                        (int)(brickH * 3 / 2) + (i + 3) * brickH, 
+                        (int)(width / brickW) - 2 - 1, 
+                        level_colors
                     );
                 }
                 break;
@@ -185,11 +175,7 @@ public class MyWorld extends World
                         (int)(brickW * 3 / 2) + i * brickW, 
                         (int)(brickH * 3 / 2) + 2 * i * brickH, 
                         (int)(width / brickW) - 1 - i * 2, 
-                        new int[] {3, 2},
-                        new String[] {
-                            colors[Greenfoot.getRandomNumber(colors.length)],
-                            colors[Greenfoot.getRandomNumber(colors.length)]
-                        }
+                        level_colors
                     );
                 }
                 break;
@@ -204,22 +190,30 @@ public class MyWorld extends World
                     {(int)(width * 0.50), (int)(height * 0.75)},
                     {(int)(width * 0.75), (int)(height * 0.75)}
                 };
-                int[] levels = {
-                    Greenfoot.getRandomNumber(2),
-                    Greenfoot.getRandomNumber(2),
-                    Greenfoot.getRandomNumber(2)
-                };
                 for (int i = 0; i < boxLocations.length; i++) {
                     brickBox(
                         boxLocations[i][0], 
                         boxLocations[i][1], 
                         4, 4,
-                        new String[] {
-                            colors[Greenfoot.getRandomNumber(colors.length)],
-                            colors[Greenfoot.getRandomNumber(colors.length)]
-                        }
+                        level_colors
                     );
                 }
+                break;
+            case 4:
+                int startX = brickW * 2;
+                int startY = brickH * 2;
+                int length = (int)((getWidth() - startX) / brickW);
+                int height = (int)((getHeight() - startY) / brickH);
+                brickColumn(startX, startY + brickH, height - 5, level_colors);
+                brickColumn(startX + (length - 1) * brickW, startY + brickH, height - 5, level_colors);
+                brickLine(startX, startY, length, level_colors);
+                brickLine(startX, startY + ((height - 4) * brickH), length, level_colors);
+                break;
+            case 5:
+                
+                break;
+            case 6:
+                
                 break;
             default:
                 System.out.println("invalid level");
@@ -227,37 +221,43 @@ public class MyWorld extends World
         }
     }
 
-    public void brickBox(int x, int y, int width, int height, String[] color) {
+    private void brickBox(int x, int y, int width, int height, String[] color) {
         for (int i = 0; i < height; i++) {
             brickLine(
                 x - (int)(width * brickW / 2) + 1, 
                 y - (int)(height * brickH / 2) + 1 + i * brickH,
                 width, 
-                new int[] {3, 2},
                 color
             );
         }
     }
 
-    public void brickLine(int x, int y, int length, int[] levels, String[] color) {
+    private void brickLine(int x, int y, int length, String[] color) {
         for (int i = 0; i < length; i++) {
             placeBrick(
                 x + i * brickW, 
                 y,
-                levels[i % levels.length],
+                color[i % color.length]
+            );
+        }
+    }
+    
+    private void brickColumn(int x, int y, int height, String[] color) {
+        for (int i = 0; i < height; i++) {
+            placeBrick(
+                x, 
+                y + i * brickH,
                 color[i % color.length]
             );
         }
     }
 
-    public void placeBrick(int x, int y, int level, String color) {
+    private void placeBrick(int x, int y, String color) {
         Brick brick;
         if (Greenfoot.getRandomNumber(100) < 20) {
-            brick = new ExplodyBrick(1, color);
-        } else if (Greenfoot.getRandomNumber(100) < 20) {
-            brick = new StrongBrick(level, color);
+            brick = new ExplodyBrick(color);
         } else {
-            brick = new Brick(1, color);
+            brick = new StrongBrick(color);
         }
         
         addObject(brick, x, y);
