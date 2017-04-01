@@ -64,7 +64,6 @@ public class Ball extends Actor
             int speed = 3;
             dx = (int) (speed * Math.cos(theta));
             dy = (int) (speed * Math.sin(theta));
-            
         } else {
             if (!x_edge && y_edge) {
                 dy = -dy;
@@ -72,19 +71,7 @@ public class Ball extends Actor
                 dx = -dx;
             }
         }
-        if (Math.abs(dx) < 1) {
-            if (dx < 0) {
-                dx = -1;
-            } else {
-                dx = 1;
-            }
-        }
-        if (Math.abs(dy) < 1) {
-            if (dy < 0) {
-                dy = -1;
-            } else {
-                dy = 1;
-            }
-        }
+        dx = (Math.abs(dx) < 1 ? dx < 0 ? -1 : 1 : dx);
+        dy = (Math.abs(dy) < 1 ? dy < 0 ? -1 : 1 : dy);
     }
 }

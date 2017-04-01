@@ -9,8 +9,8 @@ import java.util.List;
  */
 public class ExplodyBrick extends Brick
 {
-    public ExplodyBrick(String color) {
-        super(1, color);
+    public ExplodyBrick() {
+        super(1, "brown");
     }
     
     @Override
