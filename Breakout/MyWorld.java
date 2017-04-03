@@ -40,7 +40,7 @@ public class MyWorld extends World
         stateChanged = false;
         spaceUp = false;
         
-        numLevels = 6;
+        numLevels = 7;
         state = "menu";
         currState = state;
         loadState(state);
@@ -69,6 +69,9 @@ public class MyWorld extends World
                     }
                     for (Brick brick : getObjects(Brick.class)) {
                         brick.acting = true;
+                        if (level == 7) {
+                            brick.wiggle = true;
+                        }
                     }
                     
                     spaceUp = false;
@@ -125,7 +128,7 @@ public class MyWorld extends World
         removeObjects(getObjects(null));
         switch(state) {
             case "menu":
-                addObject(new Text("Welcome!\nPress space to start"), getWidth()/2, getHeight()/2);
+                addObject(new Text("Welcome!\nPress space to start", 50), getWidth()/2, getHeight()/2);
                 
                 ball = new Ball();
                 paddle = new Paddle();
@@ -133,7 +136,6 @@ public class MyWorld extends World
                 brick = new Brick(1, "red");
                 break;
             case "playing":
-                
                 addObject(ball, width/2, height / 2);
                 getObjects(Ball.class).get(0).playing = false;
                 addObject(paddle, width/2, height - paddle.getImage().getHeight()/2);
@@ -152,10 +154,10 @@ public class MyWorld extends World
                 drawLevel(level);
                 break;
             case "win":
-                addObject(new Text("You Win!"), getWidth()/2, getHeight()/2);
+                addObject(new Text("You Win!", 50), getWidth()/2, getHeight()/2);
                 break;
             case "game over":
-                addObject(new Text("Game Over!"), getWidth()/2, getHeight()/2);
+                addObject(new Text("Game Over!", 50), getWidth()/2, getHeight()/2);
                 break;
         }
     }
@@ -261,6 +263,14 @@ public class MyWorld extends World
                     }
                 }
                 break;
+            case 7:
+                placeBrick(
+                    (int)(Math.random() * world_width / 2 + world_width * 0.25),
+                    (int)(Math.random() * world_width / 2 + world_width * 0.25),
+                    colors[(int)(Math.random() * colors.length)],
+                    new int[] {(int)(Math.random() * 2), (int)(Math.random() * 2)}
+                );
+                break;
             default:
                 System.out.println("invalid level");
                 break;
@@ -305,8 +315,8 @@ public class MyWorld extends World
         Brick brick;
         if (Greenfoot.getRandomNumber(100) < 95) brick = new StrongBrick(color);
         else brick = new ExplodyBrick();
-        brick.dx = dir[0];
-        brick.dy = dir[1];
+        brick.setDx(dir[0]);
+        brick.setDy(dir[1]);
         
         addObject(brick, x, y);
     }

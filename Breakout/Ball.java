@@ -8,8 +8,8 @@ import greenfoot.*;
  */
 public class Ball extends Actor
 {
-    int dx = 1;
-    int dy = 2;
+    int dx = 0;
+    int dy = 1;
     public static boolean playing = false;
     /**
      * Act - do whatever the Ball wants to do. This method is called whenever

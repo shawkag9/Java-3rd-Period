@@ -18,18 +18,8 @@ public class Text extends Actor
     {
         
     }
-    public Text(String text) {
-        GreenfootImage image = new GreenfootImage(width * 3 / 4, height * 3 / 4);
-
-        image.setColor(new Color(0, 0, 0, 128));
-        image.fillRect(0, 0, width * 3 / 4, height * 3 / 4);
-        image.setColor(new Color(0, 0, 0, 128));
-        image.fillRect(5, 5, width * 3 / 4 -10, height * 3 / 4 -10);
-        Font font = image.getFont();
-        font = font.deriveFont(12);
-        image.setFont(font);
-        image.setColor(Color.WHITE);
-        image.drawString(text, 60, 100);
+    public Text(String text, int size) {
+        GreenfootImage image = new GreenfootImage(text, size, Color.WHITE, new Color(0, 0, 0, 0));
         setImage(image);
     }
 }
