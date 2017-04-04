@@ -64,8 +64,8 @@ public class MyWorld extends World
             case "playing":
                 if (spaceUp) {
                     Ball ball = getObjects(Ball.class).get(0);
-                    if (!ball.playing) {
-                        ball.playing = true;
+                    if (!ball.getPlaying()) {
+                        ball.setPlaying(true);
                     }
                     for (Brick brick : getObjects(Brick.class)) {
                         brick.acting = true;
@@ -137,7 +137,7 @@ public class MyWorld extends World
                 break;
             case "playing":
                 addObject(ball, width/2, height / 2);
-                getObjects(Ball.class).get(0).playing = false;
+                getObjects(Ball.class).get(0).setPlaying(false);
                 addObject(paddle, width/2, height - paddle.getImage().getHeight()/2);
                 brickW = brick.getImage().getWidth();
                 brickH = brick.getImage().getHeight();

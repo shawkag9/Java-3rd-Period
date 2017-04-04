@@ -8,15 +8,27 @@ import greenfoot.*;
  */
 public class Ball extends Actor
 {
-    int dx = 0;
-    int dy = 1;
-    public static boolean playing = false;
-    /**
-     * Act - do whatever the Ball wants to do. This method is called whenever
-     * the 'Act' or 'Run' button gets pressed in the environment.
-     */
-    public void act() 
-    {
+    private int speed;
+    private int dx;
+    private int dy;
+    private static boolean playing;
+    
+    public Ball() {
+        speed = 3;
+        dy = 1 * speed;
+        dx = 0 * speed;
+        playing = false;
+    }
+    
+    public void setPlaying(boolean p) {
+        playing = p;
+    }
+    
+    public boolean getPlaying() {
+        return playing;
+    }
+    
+    public void act() {
         if (playing) {
             bounceOffWalls();
             bounceOffStuff();
@@ -39,38 +51,35 @@ public class Ball extends Actor
             dy = -dy;
             setLocation(getX(), getImage().getHeight()/2 - 2);
         }
-        if (getY() >= getWorld().getHeight() - getImage().getHeight()/2 + 1) {
-            // game over
-            Greenfoot.stop();
-        }
     }
     
     private void bounceOffStuff() {
         if (isTouching(Brick.class)) {
-            Brick brick = getIntersectingObjects(Brick.class).get(0);
-            if (intersects(brick)) {bounce(brick);}
+            Brick brick = (Brick)getOneIntersectingObject(Brick.class);
+            if (intersects(brick)) bounce(brick);
             brick.onHit();
         }
         if (isTouching(Paddle.class)) {
-            bounce(getIntersectingObjects(Paddle.class).get(0));
+            bounce((Paddle)getOneIntersectingObject(Paddle.class));
         }
     }
     
     private void bounce(Actor thing) {
         boolean x_edge = getX() - thing.getX() < -thing.getImage().getWidth()/2 || getX() - thing.getX() > thing.getImage().getWidth()/2;
         boolean y_edge = getY() - thing.getY() < -thing.getImage().getHeight()/2 || getY() - thing.getY() > thing.getImage().getHeight()/2;
-        if (x_edge && y_edge) {
-            double theta = Math.atan2(getY() - thing.getY(), getX() - thing.getX());
-            int speed = 3;
-            dx = (int) (speed * Math.cos(theta));
-            dy = (int) (speed * Math.sin(theta));
-        } else {
-            if (!x_edge && y_edge) {
-                dy = -dy;
-            } else if (!y_edge && x_edge) {
-                dx = -dx;
-            }
-        }
+        // if (x_edge && y_edge) {
+            // double theta = Math.atan2(getY() - thing.getY(), getX() - thing.getX());
+            // dx = (int) (speed * Math.cos(theta));
+            // dy = (int) (speed * Math.sin(theta));
+        // } else {
+            // if (!x_edge && y_edge) {
+                // dy = -dy;
+            // } else if (!y_edge && x_edge) {
+                // dx = -dx;
+            // }
+        // }
+        if (x_edge) dx = -dx;
+        if (y_edge) dy = -dy;
         dx = (Math.abs(dx) < 1 ? dx < 0 ? -1 : 1 : dx);
         dy = (Math.abs(dy) < 1 ? dy < 0 ? -1 : 1 : dy);
     }

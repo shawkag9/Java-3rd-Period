@@ -21,13 +21,6 @@ public class Brick extends Actor
         this.color = color;
         this.setImage("\\bricks\\" + this.color + "\\brick" + this.level + this.color + ".png");
     }
-    // public Brick(int level, String color, boolean acting, boolean wiggle) {
-        // this.acting = acting;
-        // this.wiggle = wiggle;
-        // this.level = level;
-        // this.color = color;
-        // this.setImage("\\bricks\\" + this.color + "\\brick" + this.level + this.color + ".png");
-    // }
     
     public void setDx(int dx) {
         this.dx = dx;
@@ -42,11 +35,10 @@ public class Brick extends Actor
     
     public void act() {
         if (acting) {
-            if (wiggle) {
+            if (wiggle && Math.random() * 100 < 4) {
                 dx = (int)(Math.random() * 2 - 1);
                 dy = (int)(Math.random() * 2 - 1);
             }
-            
             
             if (getX() >= getWorld().getWidth() - getImage().getWidth()/2 + 2) {
                 setLocation(getImage().getWidth()/2, getY());
