@@ -1,0 +1,15 @@
+#BlueJ class context
+comment0.target=MovingBrick
+comment1.params=level\ color\ dx\ dy
+comment1.target=MovingBrick(int,\ java.lang.String,\ int,\ int)
+comment2.params=
+comment2.target=void\ act()
+comment3.params=dx
+comment3.target=void\ setDx(int)
+comment4.params=dy
+comment4.target=void\ setDy(int)
+comment5.params=a
+comment5.target=void\ setActing(boolean)
+comment6.params=
+comment6.target=boolean\ getActing()
+numComments=7

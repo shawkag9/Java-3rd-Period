@@ -17,7 +17,6 @@ public class MyWorld extends World
     private int width;
     private int height;
     private String state;
-    private String currState;
     private boolean stateChanged;
     private boolean wasKeyDown;
     private boolean spaceUp;
@@ -42,7 +41,6 @@ public class MyWorld extends World
         
         numLevels = 7;
         state = "menu";
-        currState = state;
         loadState(state);
     }
     
@@ -63,14 +61,15 @@ public class MyWorld extends World
                 break;
             case "playing":
                 if (spaceUp) {
-                    Ball ball = getObjects(Ball.class).get(0);
-                    if (!ball.getPlaying()) {
-                        ball.setPlaying(true);
-                    }
-                    for (Brick brick : getObjects(Brick.class)) {
-                        brick.acting = true;
-                        if (level == 7) {
-                            brick.wiggle = true;
+                    getObjects(Ball.class).get(0).setPlaying(true);
+                    if (level == 6) {
+                        for (MovingBrick brick : getObjects(MovingBrick.class)) {
+                            brick.setActing(true);
+                        }
+                    } else if (level == 7) {
+                        for (WiggleBrick brick : getObjects(WiggleBrick.class)) {
+                            brick.setActing(true);
+                            brick.setWiggle(true);
                         }
                     }
                     
@@ -84,9 +83,6 @@ public class MyWorld extends World
                     if (level < numLevels) {
                         level++;
                         loadState(state);
-                        for (Brick brick : getObjects(Brick.class)) {
-                            brick.acting = false;
-                        }
                     } else {
                         state = "win";
                         loadState(state);
@@ -313,10 +309,16 @@ public class MyWorld extends World
 
     private void placeBrick(int x, int y, String color, int[] dir) {
         Brick brick;
-        if (Greenfoot.getRandomNumber(100) < 95) brick = new StrongBrick(color);
-        else brick = new ExplodyBrick();
-        brick.setDx(dir[0]);
-        brick.setDy(dir[1]);
+        if (level < 6) {
+            if (Greenfoot.getRandomNumber(100) < 95) brick = new StrongBrick(color);
+            else brick = new ExplodyBrick();
+        } else if (level == 6) {
+            brick = new MovingBrick(3, color, dir[0], dir[1]);
+        } else if (level == 7) {
+            brick = new WiggleBrick(3, color, 0, 0);
+        } else {
+            brick = new Brick(1, color);
+        }
         
         addObject(brick, x, y);
     }

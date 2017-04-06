@@ -1,0 +1,9 @@
+#BlueJ class context
+comment0.target=WiggleBrick
+comment1.params=level\ color\ dx\ dy
+comment1.target=WiggleBrick(int,\ java.lang.String,\ int,\ int)
+comment2.params=
+comment2.target=void\ act()
+comment3.params=w
+comment3.target=void\ setWiggle(boolean)
+numComments=4
