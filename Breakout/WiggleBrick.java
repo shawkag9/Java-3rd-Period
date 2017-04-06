@@ -16,7 +16,6 @@ public class WiggleBrick extends MovingBrick {
             dy = (int)(Math.random() < 0.5 ? Math.random() + 1 : -Math.random() - 1);
             System.out.println(dx + ", " + dy);
         }
-        
     }
     
     public void setWiggle(boolean w) {
