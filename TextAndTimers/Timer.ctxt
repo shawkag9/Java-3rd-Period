@@ -1,9 +1,9 @@
 #BlueJ class context
 comment0.target=Timer
-comment1.params=size\ delay
-comment1.target=Timer(int,\ int)
+comment1.params=size\ delay\ increment
+comment1.target=Timer(int,\ int,\ int)
 comment2.params=
 comment2.target=void\ act()
-comment3.params=t
-comment3.target=void\ setString(java.lang.String)
+comment3.params=
+comment3.target=int\ getTime()
 numComments=4

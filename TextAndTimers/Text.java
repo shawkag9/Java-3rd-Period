@@ -1,20 +1,13 @@
 import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 
-public class Text extends Actor
-{
+public class Text extends Actor {
     private String text;
-    private int fontSize;
+    private int size;
+    private Timer timer;
     
-    // public Text(String t) {
-        // text = t;
-        // fontSize = 40;
-        // setSize(fontSize);
-    // }
-    // public Text(String t, int size) {
-        // text = t;
-        // fontSize = size;
-        // setSize(fontSize);
-    // }
-    
-    
+    public Text() {
+        text = "0";
+        size = 40;
+        setImage(new GreenfootImage(text, size, Color.BLACK, new Color(0, 0, 0, 0)));
+    }
 }
