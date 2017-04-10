@@ -13,6 +13,7 @@ public class MyWorld extends World
     private Brick brick;
     private int brickW;
     private int brickH;
+    
     private static String[] colors;
     private int width;
     private int height;
@@ -23,12 +24,15 @@ public class MyWorld extends World
     private int level;
     private String[] flow;
     private int numLevels;
+    
+    private int score;
+    private int time;
+    private Text scoreText;
     /**
      * Constructor for objects of class MyWorld.
      * 
      */
-    public MyWorld()
-    {    
+    public MyWorld() {    
         // Create a new world with 600x400 cells with a cell size of 1x1 pixels.
         super(600, 400, 1, false); 
         setPaintOrder(Text.class, Ball.class, Paddle.class, Brick.class);
@@ -39,12 +43,15 @@ public class MyWorld extends World
         stateChanged = false;
         spaceUp = false;
         
+        score = 0;
+        scoreText = new Text("Score:\n" + this.score, 30);
         numLevels = 7;
         state = "menu";
         loadState(state);
     }
     
     public void act() {
+        time++;
         switch(state) {
             case "menu":
                 if (spaceUp) {
@@ -82,6 +89,8 @@ public class MyWorld extends World
                 if (getObjects(Brick.class).isEmpty()) {
                     if (level < numLevels) {
                         level++;
+                        addPoints(1000 - (time / 1000));
+                        time = 0;
                         loadState(state);
                     } else {
                         state = "win";
@@ -96,6 +105,8 @@ public class MyWorld extends World
             case "win":
                 if (spaceUp) {
                     state = "menu";
+                    addPoints(-score);
+                    time = 0;
                     loadState(state);
                     
                     spaceUp = false;
@@ -108,6 +119,8 @@ public class MyWorld extends World
             case "game over":
                 if (spaceUp) {
                     state = "menu";
+                    addPoints(-score);
+                    time = 0;
                     loadState(state);
                     
                     spaceUp = false;
@@ -132,6 +145,7 @@ public class MyWorld extends World
                 brick = new Brick(1, "red");
                 break;
             case "playing":
+                addObject(scoreText, getWidth() - scoreText.getImage().getWidth()/2, getHeight() - scoreText.getImage().getHeight()/2);
                 addObject(ball, width/2, height / 2);
                 getObjects(Ball.class).get(0).setPlaying(false);
                 addObject(paddle, width/2, height - paddle.getImage().getHeight()/2);
@@ -150,10 +164,10 @@ public class MyWorld extends World
                 drawLevel(level);
                 break;
             case "win":
-                addObject(new Text("You Win!", 50), getWidth()/2, getHeight()/2);
+                addObject(new Text("You Win!\nScore: " + score, 50), getWidth()/2, getHeight()/2);
                 break;
             case "game over":
-                addObject(new Text("Game Over!", 50), getWidth()/2, getHeight()/2);
+                addObject(new Text("Game Over!\nScore: " + score, 50), getWidth()/2, getHeight()/2);
                 break;
         }
     }
@@ -260,17 +274,25 @@ public class MyWorld extends World
                 }
                 break;
             case 7:
-                placeBrick(
-                    (int)(Math.random() * world_width / 2 + world_width * 0.25),
-                    (int)(Math.random() * world_width / 2 + world_width * 0.25),
-                    colors[(int)(Math.random() * colors.length)],
-                    new int[] {(int)(Math.random() * 2), (int)(Math.random() * 2)}
-                );
+                for (int i = 0; i < 10; i++) {
+                    placeBrick(
+                        (int)(Math.random() * world_width / 2 + world_width * 0.25),
+                        (int)(Math.random() * world_width / 2 + world_width * 0.25),
+                        colors[(int)(Math.random() * colors.length)],
+                        new int[] {(int)(Math.random()), (int)(Math.random())}
+                    );
+                }
                 break;
             default:
                 System.out.println("invalid level");
                 break;
         }
+        Powerup powerup = new Powerup("bulldozer");
+        Powerup powerup2 = new Powerup("explode");
+        addObject(powerup, getWidth()/2, getHeight()/2);
+        addObject(powerup2, getWidth()/2, getHeight()/2);
+        powerup.spawn();
+        powerup2.spawn();
     }
 
     private void brickBox(int x, int y, int width, int height, String[] color, int[][] dir) {
@@ -310,8 +332,9 @@ public class MyWorld extends World
     private void placeBrick(int x, int y, String color, int[] dir) {
         Brick brick;
         if (level < 6) {
-            if (Greenfoot.getRandomNumber(100) < 95) brick = new StrongBrick(color);
-            else brick = new ExplodyBrick();
+            if (Greenfoot.getRandomNumber(100) < 60) brick = new StrongBrick(3, color);
+            else if (Greenfoot.getRandomNumber(100) < 5) brick = new ExplodyBrick();
+            else brick = new Brick(1, color);
         } else if (level == 6) {
             brick = new MovingBrick(3, color, dir[0], dir[1]);
         } else if (level == 7) {
@@ -321,6 +344,12 @@ public class MyWorld extends World
         }
         
         addObject(brick, x, y);
+    }
+    
+    public void addPoints(int points) {
+        this.score += points;
+        scoreText.setText("Score:\n" + this.score);
+        scoreText.setLocation(getWidth() - scoreText.getImage().getWidth()/2, getHeight() - scoreText.getImage().getHeight()/2);
     }
 }
 

@@ -18,4 +18,6 @@ comment7.params=x\ y\ height\ color\ dir
 comment7.target=void\ brickColumn(int,\ int,\ int,\ java.lang.String[],\ int[][])
 comment8.params=x\ y\ color\ dir
 comment8.target=void\ placeBrick(int,\ int,\ java.lang.String,\ int[])
-numComments=9
+comment9.params=points
+comment9.target=void\ addPoints(int)
+numComments=10

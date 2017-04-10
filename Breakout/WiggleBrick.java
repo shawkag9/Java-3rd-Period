@@ -14,7 +14,6 @@ public class WiggleBrick extends MovingBrick {
         if (wiggle && Math.random() * 100 < 1) {
             dx = (int)(Math.random() < 0.5 ? Math.random() + 1 : -Math.random() - 1);
             dy = (int)(Math.random() < 0.5 ? Math.random() + 1 : -Math.random() - 1);
-            System.out.println(dx + ", " + dy);
         }
     }
     

@@ -1,23 +1,23 @@
 import greenfoot.*;
 
-/**
- * Write a description of class Ball here.
- * 
- * @author (your name) 
- * @version (a version number or a date)
- */
 public class Ball extends Actor
 {
     private int speed;
     private int dx;
     private int dy;
     private static boolean playing;
+    private boolean bulldozer;
+    private int powerupTimer;
+    private boolean explode;
     
     public Ball() {
         speed = 3;
         dy = 1 * speed;
         dx = 0 * speed;
         playing = false;
+        bulldozer = false;
+        explode = false;
+        powerupTimer = 500;
     }
     
     public void setPlaying(boolean p) {
@@ -30,10 +30,33 @@ public class Ball extends Actor
     
     public void act() {
         if (playing) {
+            checkForPowerup();
             bounceOffWalls();
             bounceOffStuff();
             
             setLocation(getX() + dx, getY() + dy);
+        }
+    }
+    
+    private void checkForPowerup() {
+        if (bulldozer || explode) powerupTimer--;
+        if (powerupTimer < 0) {
+            setImage("ball.png");
+            bulldozer = false;
+            explode = false;
+        }
+        if (isTouching(Powerup.class)) {
+            powerupTimer = 500;
+            Powerup powerup = (Powerup)getOneIntersectingObject(Powerup.class);
+            if (powerup.getType().equals("bulldozer")) {
+                setImage("BiggerBall001.png");
+                bulldozer = true;
+                getWorld().removeObject(powerup);
+            } else if (powerup.getType().equals("explode")) {
+                setImage("BiggerBall002.png");
+                explode = true;
+                getWorld().removeObject(powerup);
+            }
         }
     }
     
@@ -56,8 +79,25 @@ public class Ball extends Actor
     private void bounceOffStuff() {
         if (isTouching(Brick.class)) {
             Brick brick = (Brick)getOneIntersectingObject(Brick.class);
-            if (intersects(brick)) bounce(brick);
-            brick.onHit();
+            if (bulldozer) {
+                getWorld().removeObject(brick);
+                MyWorld world = (MyWorld)getWorld();
+                world.addPoints(100);
+            } else {
+                if (intersects(brick)) bounce(brick);
+                if (explode) {
+                    if (brick.getClass() != ExplodyBrick.class) {
+                        getWorld().addObject(new ExplodyBrick(), brick.getX(), brick.getY());
+                        getWorld().removeObject(brick);
+                        ExplodyBrick newBrick = (ExplodyBrick)getOneIntersectingObject(ExplodyBrick.class);
+                        newBrick.onHit();
+                    } else {
+                        brick.onHit();
+                    }
+                } else {
+                    brick.onHit();
+                }
+            }
         }
         if (isTouching(Paddle.class)) {
             bounce((Paddle)getOneIntersectingObject(Paddle.class));
@@ -65,8 +105,8 @@ public class Ball extends Actor
     }
     
     private void bounce(Actor thing) {
-        boolean x_edge = getX() - thing.getX() < -thing.getImage().getWidth()/2 || getX() - thing.getX() > thing.getImage().getWidth()/2;
-        boolean y_edge = getY() - thing.getY() < -thing.getImage().getHeight()/2 || getY() - thing.getY() > thing.getImage().getHeight()/2;
+        boolean x_edge = getX() - thing.getX() <= -thing.getImage().getWidth()/2 - 2|| getX() - thing.getX() >= thing.getImage().getWidth()/2 + 2;
+        boolean y_edge = getY() - thing.getY() <= -thing.getImage().getHeight()/2 - 2|| getY() - thing.getY() >= thing.getImage().getHeight()/2 + 2;
         // if (x_edge && y_edge) {
             // double theta = Math.atan2(getY() - thing.getY(), getX() - thing.getX());
             // dx = (int) (speed * Math.cos(theta));

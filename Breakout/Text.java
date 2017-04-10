@@ -8,18 +8,40 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
  */
 public class Text extends Actor
 {
-    private static final int width = 600;
-    private static final int height = 400;
-    /**
-     * Act - do whatever the Title wants to do. This method is called whenever
-     * the 'Act' or 'Run' button gets pressed in the environment.
-     */
-    public void act() 
-    {
-        
-    }
+    private String text;
+    private int size;
+    private Color foreground;
+    private Color background;
+    
     public Text(String text, int size) {
-        GreenfootImage image = new GreenfootImage(text, size, Color.WHITE, new Color(0, 0, 0, 0));
-        setImage(image);
+        this.text = text;
+        this.size = size;
+        this.foreground = Color.WHITE;
+        this.background = new Color(0, 0, 0, 0);
+        updateImage();
+    }
+    
+    public void updateImage() {
+        setImage(new GreenfootImage(this.text, this.size, this.foreground, this.background));
+    }
+    
+    public void setText(String text) {
+        this.text = text;
+        updateImage();
+    }
+    public String getText() {
+        return text;
+    }
+    
+    public int getSize() {
+        return size;
+    }
+    
+    public Color getForeground() {
+        return foreground;
+    }
+    
+    public Color getBackground() {
+        return background;
     }
 }

@@ -2,8 +2,15 @@
 comment0.target=Timer
 comment1.params=size\ delay\ increment
 comment1.target=Timer(int,\ int,\ int)
+comment1.text=\r\n\ Creates\ a\ new\ timer\ on\ screen\ with\ a\ specified\ int\ size,\ int\ delay,\ and\ int\ increment.\r\n
 comment2.params=
 comment2.target=void\ act()
 comment3.params=
 comment3.target=int\ getTime()
-numComments=4
+comment4.params=time
+comment4.target=void\ setTime(int)
+comment5.params=p
+comment5.target=void\ setPause(boolean)
+comment6.params=
+comment6.target=boolean\ getPause()
+numComments=7

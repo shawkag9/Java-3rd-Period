@@ -11,11 +11,15 @@ public class Brick extends Actor
     }
     
     public void onHit() {
-        if (this.level <= 1) {
-            getWorld().removeObject(this);
-        } else {
-            this.level--;
-            this.setImage("\\bricks\\" + this.color + "\\brick" + this.level + this.color + ".png");
+        if (getWorld() != null) {
+            MyWorld world = (MyWorld)getWorld();
+            world.addPoints(100);
+            if (this.level <= 1) {
+                getWorld().removeObject(this);
+            } else {
+                this.level--;
+                this.setImage("\\bricks\\" + this.color + "\\brick" + this.level + this.color + ".png");
+            }
         }
     }
 }
