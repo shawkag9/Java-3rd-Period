@@ -1,10 +1,8 @@
 #BlueJ class context
-comment0.target=BlurBW
-comment0.text=\r\n\ Shaw\ Kagawa\r\n\ Period\ 3\r\n\ 5/15/17\r\n\ Blur\ Filter\:\ Blurs\ the\ image\ by\ averaging\ the\ x\ cells\ around\ it.\r\n
-comment1.params=ip
-comment1.target=void\ filter(imagelab.ImgProvider)
+comment0.params=ip
+comment0.target=void\ filter(imagelab.ImgProvider)
+comment1.params=
+comment1.target=imagelab.ImgProvider\ getImgProvider()
 comment2.params=
-comment2.target=imagelab.ImgProvider\ getImgProvider()
-comment3.params=
-comment3.target=java.lang.String\ getMenuLabel()
-numComments=4
+comment2.target=java.lang.String\ getMenuLabel()
+numComments=3
